@@ -24,8 +24,15 @@ class Game {
       В случае правильного ввода слова вызываем this.success()
       При неправильном вводе символа - this.fail();
      */
+    document.addEventListener('keydown', (event) => {
+      const sumbol = this.currentSymbol
+      if (sumbol.textContent === event.key) {
+        this.success()
+      } else {
+        this.fail()
+      }
+    })
   }
-
   success() {
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
@@ -77,7 +84,7 @@ class Game {
     const html = [...word]
       .map(
         (s, i) =>
-          `<span class="symbol ${i === 0 ? 'symbol_current': ''}">${s}</span>`
+        `<span class="symbol ${i === 0 ? 'symbol_current': ''}">${s}</span>`
       )
       .join('');
     this.wordElement.innerHTML = html;
@@ -87,4 +94,3 @@ class Game {
 }
 
 new Game(document.getElementById('game'))
-
