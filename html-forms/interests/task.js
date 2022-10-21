@@ -1,16 +1,39 @@
-const interestCheck = [...document.querySelectorAll('.interest__check')]
+let interestsMain = document.querySelector('.interests_main'),
+  interestCheck = interestsMain.querySelectorAll('.interest'),
+  checkedInterests,
+  allInterests,
+  parentInterest,
+  main;
 
-for (let check of interestCheck) {
-  check.checked = false
-}
+interestCheck.forEach(el => {
+  el.addEventListener('change', function(event) {
+    main = event.target.closest('.interest').querySelector('.interests_active');
 
-interestCheck.forEach((check) => check.addEventListener('change', checkAllCheckboxes))
+    if (main !== null) {
+      main.querySelectorAll('.interest__check').forEach(e => {
+        e.checked = event.target.checked;
+      });
+    }
 
-function checkAllCheckboxes(event) {
-  const parent = event.target.closest('.interest')
-  const children = [...parent.querySelectorAll('.interest__check')]
+    if (el.closest('.interests').classList.contains('interests_active')) {
+      parentInterest = el.closest('.interests').closest('.interest').querySelector('.interest__check');
+      allInterests = el.closest('.interests').querySelectorAll('.interest__check');
+      checkedInterests = el.closest('.interests').querySelectorAll('.interest__check:checked');
+    } else {
+      parentInterest = el.querySelector('.interest__check');
+      allInterests = el.querySelectorAll('.interest__check');
+      checkedInterests = el.querySelectorAll('.interest__check:checked');
+    }
 
-  for (let child of children) {
-    child.checked = this.checked
-  }
-}
+    if (checkedInterests.length === 0) {
+      parentInterest.indeterminate = false;
+      parentInterest.checked = false;
+    } else if (checkedInterests.length < allInterests.length) {
+      parentInterest.indeterminate = true;
+      parentInterest.checked = false;
+    } else if (checkedInterests.length === allInterests.length) {
+      parentInterest.indeterminate = false;
+      parentInterest.checked = true;
+    }
+  });
+});
